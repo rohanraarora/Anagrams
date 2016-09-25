@@ -60,7 +60,11 @@ public class AnagramDictionary {
             char c = (char) i;
             String oneMoreLetterWord = word.concat(String.valueOf(c));
             ArrayList<String> anagrams = getAnagrams(oneMoreLetterWord);
-            result.addAll(anagrams);
+            for(String anagram:anagrams){
+                if(isGoodWord(anagram,word)){
+                    result.add(anagram);
+                }
+            }
         }
         return result;
     }
