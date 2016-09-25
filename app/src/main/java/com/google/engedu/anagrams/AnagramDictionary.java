@@ -59,12 +59,7 @@ public class AnagramDictionary {
         ArrayList<String> result = new ArrayList<String>();
         String sortedWord = sortLetters(targetWord);
         if(lettersToWord.containsKey(sortedWord)){
-            ArrayList<String> anagrams = lettersToWord.get(sortedWord);
-            for(String anagram:anagrams){
-                if(isGoodWord(anagram,targetWord)){
-                    result.add(anagram);
-                }
-            }
+            result.addAll(lettersToWord.get(sortedWord));
         }
         return result;
     }
@@ -77,7 +72,11 @@ public class AnagramDictionary {
             char c = (char) i;
             String oneMoreLetterWord = word.concat(String.valueOf(c));
             ArrayList<String> anagrams = getAnagrams(oneMoreLetterWord);
-            result.addAll(anagrams);
+            for(String anagram:anagrams){
+                if(isGoodWord(anagram,word)){
+                    result.add(anagram);
+                }
+            }
         }
         return result;
     }
