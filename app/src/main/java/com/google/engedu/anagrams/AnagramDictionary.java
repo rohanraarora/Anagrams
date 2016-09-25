@@ -40,7 +40,7 @@ public class AnagramDictionary {
     }
 
     public boolean isGoodWord(String word, String base) {
-        return true;
+        return wordSet.contains(word) && !word.contains(base);
     }
 
     public ArrayList<String> getAnagrams(String targetWord) {
