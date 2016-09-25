@@ -54,6 +54,14 @@ public class AnagramDictionary {
 
     public ArrayList<String> getAnagramsWithOneMoreLetter(String word) {
         ArrayList<String> result = new ArrayList<String>();
+        int CHAR_a = 97;
+        int CHAR_z = 122;
+        for(int i = CHAR_a;i<=CHAR_z;i++){
+            char c = (char) i;
+            String oneMoreLetterWord = word.concat(String.valueOf(c));
+            ArrayList<String> anagrams = getAnagrams(oneMoreLetterWord);
+            result.addAll(anagrams);
+        }
         return result;
     }
 
