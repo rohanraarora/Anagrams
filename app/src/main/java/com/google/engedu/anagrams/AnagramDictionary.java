@@ -60,11 +60,7 @@ public class AnagramDictionary {
         String sortedWord = sortLetters(targetWord);
         if(lettersToWord.containsKey(sortedWord)){
             ArrayList<String> anagrams = lettersToWord.get(sortedWord);
-            for(String anagram:anagrams){
-                if(isGoodWord(anagram,targetWord)){
-                    result.add(anagram);
-                }
-            }
+            result.addAll(anagrams);
         }
         return result;
     }
@@ -77,7 +73,31 @@ public class AnagramDictionary {
             char c = (char) i;
             String oneMoreLetterWord = word.concat(String.valueOf(c));
             ArrayList<String> anagrams = getAnagrams(oneMoreLetterWord);
-            result.addAll(anagrams);
+            for(String anagram:anagrams){
+                if(isGoodWord(anagram,word)){
+                    result.add(anagram);
+                }
+            }
+        }
+        return result;
+    }
+
+    public ArrayList<String> getAnagramsWithTwoMoreLetter(String word){
+        ArrayList<String> result = new ArrayList<String>();
+        int CHAR_a = 97;
+        int CHAR_z = 122;
+        for(int i = CHAR_a;i<=CHAR_z;i++){
+            char firstChar = (char) i;
+            for(int j = i;j<=CHAR_z;j++){
+                char secondChar = (char) j;
+                String twoMoreLetterWord = word.concat(String.valueOf(firstChar)).concat(String.valueOf(secondChar));
+                ArrayList<String> anagrams = getAnagrams(twoMoreLetterWord);
+                for(String anagram:anagrams){
+                    if(isGoodWord(anagram,word)){
+                        result.add(anagram);
+                    }
+                }
+            }
         }
         return result;
     }
@@ -85,7 +105,7 @@ public class AnagramDictionary {
     public String pickGoodStarterWord() {
         ArrayList<String> sizeWordList = sizeToWord.get(currentWordLength);
         String randomWord = sizeWordList.get(random.nextInt(sizeWordList.size()-1));
-        ArrayList<String> anagrams = getAnagramsWithOneMoreLetter(sortLetters(randomWord));
+        ArrayList<String> anagrams = getAnagramsWithTwoMoreLetter(sortLetters(randomWord));
         if(anagrams.size() >= MIN_NUM_ANAGRAMS){
             if(currentWordLength < MAX_WORD_LENGTH){
                 currentWordLength++;
