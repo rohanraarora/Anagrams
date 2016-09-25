@@ -19,6 +19,8 @@ public class AnagramDictionary {
     private ArrayList<String> wordList = new ArrayList<>();
     private HashSet<String> wordSet = new HashSet<>();
     private HashMap<String, ArrayList<String>> lettersToWord = new HashMap<>();
+    private HashMap<Integer,ArrayList<String>> sizeToWord = new HashMap<>();
+    private int currentWordLength;
 
     public AnagramDictionary(InputStream wordListStream) throws IOException {
         BufferedReader in = new BufferedReader(new InputStreamReader(wordListStream));
@@ -36,7 +38,17 @@ public class AnagramDictionary {
                 anagramGroup.add(word);
                 lettersToWord.put(sortedWord,anagramGroup);
             }
+            Integer size = word.length();
+            if(sizeToWord.containsKey(size)){
+                sizeToWord.get(size).add(word);
+            }
+            else {
+                ArrayList<String> sizeGroup = new ArrayList<>();
+                sizeGroup.add(word);
+                sizeToWord.put(size,sizeGroup);
+            }
         }
+        currentWordLength = DEFAULT_WORD_LENGTH;
     }
 
     public boolean isGoodWord(String word, String base) {
@@ -47,7 +59,12 @@ public class AnagramDictionary {
         ArrayList<String> result = new ArrayList<String>();
         String sortedWord = sortLetters(targetWord);
         if(lettersToWord.containsKey(sortedWord)){
-            result.addAll(lettersToWord.get(sortedWord));
+            ArrayList<String> anagrams = lettersToWord.get(sortedWord);
+            for(String anagram:anagrams){
+                if(isGoodWord(anagram,targetWord)){
+                    result.add(anagram);
+                }
+            }
         }
         return result;
     }
@@ -66,9 +83,13 @@ public class AnagramDictionary {
     }
 
     public String pickGoodStarterWord() {
-        String randomWord = wordList.get(random.nextInt(wordList.size()-1));
+        ArrayList<String> sizeWordList = sizeToWord.get(currentWordLength);
+        String randomWord = sizeWordList.get(random.nextInt(sizeWordList.size()-1));
         ArrayList<String> anagrams = getAnagramsWithOneMoreLetter(sortLetters(randomWord));
         if(anagrams.size() >= MIN_NUM_ANAGRAMS){
+            if(currentWordLength < MAX_WORD_LENGTH){
+                currentWordLength++;
+            }
             return randomWord;
         }
         return pickGoodStarterWord();
