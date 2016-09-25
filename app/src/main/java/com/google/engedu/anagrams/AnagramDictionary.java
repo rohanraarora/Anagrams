@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 public class AnagramDictionary {
@@ -30,6 +31,13 @@ public class AnagramDictionary {
 
     public ArrayList<String> getAnagrams(String targetWord) {
         ArrayList<String> result = new ArrayList<String>();
+        for(String word:wordList){
+            if(word.length() == targetWord.length()){
+                if(sortLetters(word).equals(sortLetters(targetWord))){
+                    result.add(word);
+                }
+            }
+        }
         return result;
     }
 
@@ -40,5 +48,11 @@ public class AnagramDictionary {
 
     public String pickGoodStarterWord() {
         return "stop";
+    }
+
+    public String sortLetters(String word){
+        char[] letters = word.toCharArray();
+        Arrays.sort(letters);
+        return new String(letters);
     }
 }
