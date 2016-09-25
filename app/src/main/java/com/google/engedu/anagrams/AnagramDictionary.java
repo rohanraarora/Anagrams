@@ -66,7 +66,12 @@ public class AnagramDictionary {
     }
 
     public String pickGoodStarterWord() {
-        return "stop";
+        String randomWord = wordList.get(random.nextInt(wordList.size()-1));
+        ArrayList<String> anagrams = getAnagramsWithOneMoreLetter(sortLetters(randomWord));
+        if(anagrams.size() >= MIN_NUM_ANAGRAMS){
+            return randomWord;
+        }
+        return pickGoodStarterWord();
     }
 
     public String sortLetters(String word){
